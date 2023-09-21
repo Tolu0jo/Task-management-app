@@ -1,4 +1,4 @@
-import {IsString, IsNotEmpty,IsOptional} from "class-validator"
+import {IsString, IsNotEmpty,IsOptional, IsIn} from "class-validator"
 export class CreateTaskDTO{
     @IsString()
     @IsNotEmpty()
@@ -19,11 +19,17 @@ export class EditTaskDTO{
     description: string;
     
     @IsString()
-    @IsOptional()
+    @IsIn(["OPEN", "IN_PROGRESS", "DONE"])
     status: "OPEN" | "IN PROGRESS" | "DONE";
 }
 
+
 export class GetTaskFilTerDto{
-    status: "OPEN" | "IN PROGRESS" | "DONE";
+    @IsOptional()
+    @IsIn(["OPEN", "IN_PROGRESS", "DONE"])
+    status:string;
+
+    @IsOptional()
+    @IsNotEmpty()
     search: string
 }
