@@ -35,8 +35,6 @@ export class AuthService {
         })
         .save();
 
-
-
       return newUser;
     } catch (error) {
       if (error.code === '23505') {
@@ -47,21 +45,20 @@ export class AuthService {
     }
   }
 
-  async signIn(dto: SignInDto) :Promise<{token: string}> {
+  async signIn(dto: SignInDto): Promise<{ token: string }> {
     try {
       const { email, password } = dto;
       const user = await this.userRepository.findOneBy({ email });
       if (user && (await user.validatePassword(password))) {
-        
-        const {id}=user
-        const payload ={id}
-        const token = await this.jwtService.signAsync(payload)
-        return {token}; 
+        const { id } = user;
+        const payload = { id };
+        const token = await this.jwtService.signAsync(payload);
+        return { token };
       } else {
         throw new UnauthorizedException('Invalid credentials');
       }
     } catch (error) {
       throw new InternalServerErrorException();
     }
-  };
+  }
 }

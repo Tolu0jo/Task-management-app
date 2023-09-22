@@ -21,7 +21,7 @@ export class EditTaskDTO{
     
     @IsString()
     @IsIn(["OPEN", "IN_PROGRESS", "DONE"])
-    status: "OPEN" | "IN PROGRESS" | "DONE";
+    status: string;
 }
 
 

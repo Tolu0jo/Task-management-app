@@ -18,4 +18,7 @@ status:string
 
 @ManyToOne(type => User, user => user.tasks,{eager:false})
 user:User
+
+@Column()
+userId:string
 }

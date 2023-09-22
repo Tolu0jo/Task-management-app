@@ -6,21 +6,17 @@ import { User } from 'src/entities/user.entity';
 import { GetUser } from './get-user.decorator';
 
 @Controller('auth')
-
 export class AuthController {
-    constructor(private authService: AuthService){}
+  constructor(private authService: AuthService) {}
 
+  @Post('/signup')
+  signUp(@Body() dto: SignUpDto) {
+    return this.authService.signUp(dto);
+  }
 
-    @Post("/signup")
-    signUp(@Body() dto:SignUpDto){
-        return this.authService.signUp(dto)
-    };
-
-    @Post("/signin")
-    async signIn(@Body() dto:SignInDto):Promise<{token:string}>{
-        return this.authService.signIn(dto)
-    };
-    // @UseGuards(AuthGuard())
-
-  
+  @Post('/signin')
+  async signIn(@Body() dto: SignInDto): Promise<{ token: string }> {
+    return this.authService.signIn(dto);
+  }
+  // @UseGuards(AuthGuard())
 }
