@@ -35,6 +35,8 @@ export class AuthService {
         })
         .save();
 
+
+
       return newUser;
     } catch (error) {
       if (error.code === '23505') {

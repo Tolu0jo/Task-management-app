@@ -6,6 +6,7 @@ import { CreateTaskDTO, TaskFilTerDto } from '../dto/task/task.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Task } from '../entities/task.entity';
 import { Repository, SelectQueryBuilder } from 'typeorm';
+import { User } from 'src/entities/user.entity';
 @Injectable()
 export class TasksService {
   constructor(
@@ -41,7 +42,7 @@ export class TasksService {
     return task;
   }
 
-  async createTask(dto: CreateTaskDTO): Promise<Task> {
+  async createTask(dto: CreateTaskDTO,user:User): Promise<Task> {
     const { title, description } = dto;
     const task = new Task();
 
@@ -49,8 +50,10 @@ export class TasksService {
     task.title = title;
     task.description = description;
     task.status = 'OPEN';
+    task.user=user
     await task.save();
-
+ 
+    delete task.user;
     return task;
   }
 

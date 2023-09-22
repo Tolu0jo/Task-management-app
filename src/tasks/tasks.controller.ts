@@ -7,6 +7,7 @@ import {
   Patch,
   Post,
   Query,
+  UseGuards,
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
@@ -15,8 +16,12 @@ import { TasksService } from './tasks.service';
 import { CreateTaskDTO, TaskFilTerDto } from '../dto/task/task.dto';
 import { Task } from '../entities/task.entity';
 import { TaskStatusValidationPipe } from 'src/dto/task/task-status-validation-pipe';
+import { AuthGuard } from '@nestjs/passport';
+import { GetUser } from 'src/auth/get-user.decorator';
+import { User } from 'src/entities/user.entity';
 
 @Controller('tasks')
+@UseGuards(AuthGuard())
 export class TasksController {
   constructor(private tasksService: TasksService) {}
   @Get()
@@ -30,9 +35,10 @@ export class TasksController {
   }
 
   @Post()
-  @UsePipes(ValidationPipe)
-  createTask(@Body() createTaskDTO: CreateTaskDTO): Promise<Task> {
-    return this.tasksService.createTask(createTaskDTO);
+   createTask(
+    @GetUser()user:User,
+    @Body() createTaskDTO: CreateTaskDTO): Promise<Task> {
+    return this.tasksService.createTask(createTaskDTO,user);
   }
 
   @Patch(':id')

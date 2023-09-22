@@ -2,8 +2,11 @@ import { Body, Controller, Get, Post, Req, UseGuards } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { SignInDto, SignUpDto } from 'src/dto/user/user.dto';
 import { AuthGuard } from '@nestjs/passport';
+import { User } from 'src/entities/user.entity';
+import { GetUser } from './get-user.decorator';
 
 @Controller('auth')
+
 export class AuthController {
     constructor(private authService: AuthService){}
 
@@ -17,10 +20,7 @@ export class AuthController {
     async signIn(@Body() dto:SignInDto):Promise<{token:string}>{
         return this.authService.signIn(dto)
     };
+    // @UseGuards(AuthGuard())
 
-   @Post()
-   @UseGuards(AuthGuard())
-   async get(@Req()req){
-    console.log(req)
-   }
+  
 }
