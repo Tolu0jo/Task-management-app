@@ -14,6 +14,7 @@ export class EditTaskDTO{
     @IsOptional()
     title: string;
 
+
     @IsString()
     @IsOptional()
     description: string;
