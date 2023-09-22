@@ -5,17 +5,21 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from 'src/entities/user.entity';
 import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
+import { JwtStrategy } from './jwt.strategy';
+
 @Module({
   imports: [
-    PassportModule.register({defaultStrategy:"jwt"}),
+    PassportModule.register({ defaultStrategy: 'jwt' }),
     JwtModule.register({
-      secret:"secret",
-      signOptions:{
-        expiresIn:3600
-      }
+      secret: 'secret',
+      signOptions: {
+        expiresIn: 3600,
+      },
     }),
-    TypeOrmModule.forFeature([User])],
-  providers: [AuthService],
+    TypeOrmModule.forFeature([User]),
+  ],
+  providers: [AuthService, JwtStrategy],
   controllers: [AuthController],
+  exports: [JwtStrategy,  PassportModule],
 })
 export class AuthModule {}

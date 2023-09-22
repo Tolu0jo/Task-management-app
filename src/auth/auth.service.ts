@@ -11,12 +11,14 @@ import { Repository } from 'typeorm';
 import { v4 as uuid } from 'uuid';
 import * as argon from 'argon2';
 import _ from 'lodash';
+import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class AuthService {
   constructor(
     @InjectRepository(User)
     private userRepository: Repository<User>,
+    private jwtService: JwtService,
   ) {}
 
   async signUp(dto: SignUpDto) {
@@ -43,14 +45,18 @@ export class AuthService {
     }
   }
 
-  async signIn(dto: SignInDto) {
+  async signIn(dto: SignInDto) :Promise<{token: string}> {
     try {
       const { email, password } = dto;
       const user = await this.userRepository.findOneBy({ email });
       if (user && (await user.validatePassword(password))) {
-        return user;
+        
+        const {id}=user
+        const payload ={id}
+        const token = await this.jwtService.signAsync(payload)
+        return {token}; 
       } else {
-        return new UnauthorizedException('Invalid credentials');
+        throw new UnauthorizedException('Invalid credentials');
       }
     } catch (error) {
       throw new InternalServerErrorException();
