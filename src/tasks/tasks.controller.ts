@@ -12,39 +12,41 @@ import {
 } from '@nestjs/common';
 import { TasksService } from './tasks.service';
 
-import { CreateTaskDTO, EditTaskDTO, GetTaskFilTerDto } from './dto/task.dto';
+import { CreateTaskDTO, EditTaskDTO, TaskFilTerDto } from './dto/task.dto';
+import { Task } from './entities/task.entity';
+import { dirname } from 'path';
+import { TaskStatusValidationPipe } from './dto/task-status-validation-pipe';
 
 @Controller('tasks')
 export class TasksController {
   constructor(private tasksService: TasksService) {}
-//   @Get()
-//   getAllTasks(@Query(ValidationPipe) filterDto: GetTaskFilTerDto): Task[] {
-//     if (Object.keys(filterDto).length) {
-//       return this.tasksService.getTaskWithFilter(filterDto);
-//     } else {
-//       return this.tasksService.getAllTasks();
-//     }
-//   }
+    @Get()
+  async  getAllTasks(@Query(ValidationPipe) filterDto: TaskFilTerDto) {
 
-//   @Get(':id')
-//   getTask(@Param('id') id: string): Task {
-//     return this.tasksService.getTask(id);
-//   }
+        return this.tasksService.getTasks(filterDto);
+ 
+    }
 
-//   @Post()
-//   @UsePipes(ValidationPipe)
-//   createTask(@Body() createTaskDTO: CreateTaskDTO): Task {
-//     return this.tasksService.createTask(createTaskDTO);
-//   }
+  @Get(':id')
+  getTask(@Param('id') id: string): Promise<Task> {
+   
+    return this.tasksService.getTaskById(id);
+  }
 
-//   @Patch(':id')
-//   @UsePipes(ValidationPipe)
-//   editTask(@Param('id') id: string, @Body() editTaskDTO: EditTaskDTO): Task {
-//     return this.tasksService.editTask(id, editTaskDTO);
-//   }
+  @Post()
+  @UsePipes(ValidationPipe)
+  createTask(@Body() createTaskDTO: CreateTaskDTO): Promise<Task> {
+    return this.tasksService.createTask(createTaskDTO);
+  }
 
-//   @Delete(':id')
-//   deleteTask(id: string): Task[] {
-//     return this.tasksService.deleteTask(id);
-//   }
+    @Patch(':id')
+    // @UsePipes(ValidationPipe)
+    async editTask(@Param('id') id: string, @Body("status",TaskStatusValidationPipe) status:string){
+      return await this.tasksService.editTask(id, status);
+    };
+
+    @Delete(':id')
+    async deleteTask(@Param("id")id:string) {
+      return await this.tasksService.deleteTask(id);
+    }
 }

@@ -24,7 +24,7 @@ export class EditTaskDTO{
 }
 
 
-export class GetTaskFilTerDto{
+export class TaskFilTerDto{
     @IsOptional()
     @IsIn(["OPEN", "IN_PROGRESS", "DONE"])
     status:string;

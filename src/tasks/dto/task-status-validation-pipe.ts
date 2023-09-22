@@ -8,7 +8,7 @@ export class TaskStatusValidationPipe implements PipeTransform{
     ]
 
     transform(value){
-        console.log(value)
+      
         value = value.trim().toUpperCase();
         if(!this.allowedStatuses.includes(value)){
         throw new BadRequestException(`${value} is not valid`) 

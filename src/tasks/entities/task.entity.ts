@@ -1,9 +1,10 @@
 import { BaseEntity,Column,Entity, PrimaryGeneratedColumn } from "typeorm";
 
+
 @Entity()
-export class Task extends BaseEntity{
-@PrimaryGeneratedColumn()
-id:number;
+export class Task extends BaseEntity {
+@PrimaryGeneratedColumn("uuid")
+id:string;
 
 @Column()
 title:string;
@@ -12,5 +13,5 @@ title:string;
 description:string;
 
 @Column()
-status: "IN_PROGRESS"|"DONE"|"OPEN"
+status:string
 }
