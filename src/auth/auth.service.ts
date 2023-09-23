@@ -24,7 +24,8 @@ export class AuthService {
   async signUp(dto: SignUpDto) {
     try {
       const { email, username, password } = dto;
-      const hash = await argon.hash(dto.password);
+
+      const hash = await argon.hash(password);
 
       const newUser = await this.userRepository
         .create({
@@ -45,19 +46,21 @@ export class AuthService {
     }
   }
 
-  async signIn(dto: SignInDto): Promise<{ token: string }> {
+  async signIn(dto: SignInDto): Promise<{ accessToken: string }> {
     try {
       const { email, password } = dto;
+
       const user = await this.userRepository.findOneBy({ email });
       if (user && (await user.validatePassword(password))) {
         const { id } = user;
         const payload = { id };
         const token = await this.jwtService.signAsync(payload);
-        return { token };
+        return { accessToken: token};
       } else {
         throw new UnauthorizedException('Invalid credentials');
       }
     } catch (error) {
+        console.log(error)
       throw new InternalServerErrorException();
     }
   }

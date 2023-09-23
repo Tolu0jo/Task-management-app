@@ -3,6 +3,7 @@ import {
   Controller,
   Delete,
   Get,
+  Logger,
   Param,
   Patch,
   Post,
@@ -25,6 +26,7 @@ import { Task } from 'src/entities/task.entity';
 @Controller('tasks')
 @UseGuards(AuthGuard())
 export class TasksController {
+
   constructor(private tasksService: TasksService) {}
   @Get()
   async getAllTasks(
@@ -39,6 +41,7 @@ export class TasksController {
     @Param('id') id: string,
     @GetUser('id') userId: string,
   ): Promise<Task> {
+
     return this.tasksService.getTaskById(id, userId);
   }
 

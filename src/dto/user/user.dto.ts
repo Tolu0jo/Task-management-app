@@ -7,7 +7,7 @@ export class SignUpDto{
 
     @IsString()
     @IsNotEmpty()
-    @MinLength(4)
+    @MinLength(3)
     @MaxLength(10)
     username:string;
 
